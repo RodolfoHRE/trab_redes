@@ -1,3 +1,4 @@
+#Leitura dos dados do Broker MQTTS
 import paho.mqtt.client as mqtt
 import csv
 
@@ -41,8 +42,8 @@ client.on_message = on_message
 # Informações de conexão ao broker
 broker_address = "endereco_do_broker"
 port = 1883
-username = "seu_username"
-password = "sua_senha"
+username = "HEMERA"
+password = "12345678"
 
 # Conectar ao broker
 client.username_pw_set(username, password)
