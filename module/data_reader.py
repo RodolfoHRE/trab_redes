@@ -1,7 +1,10 @@
 #Leitura dos dados do Broker MQTTS
 import paho.mqtt.client as mqtt
 import csv
+import datetime
 
+# Variável de timestamp de datetime
+dt = f'{datetime.datetime.now():%Y-%m-%d %H:%M:%S%z}'
 # Defina o número de dados a serem coletados
 num_dados_a_coletar = 10
 
@@ -31,7 +34,7 @@ def salvar_para_csv(dados):
     with open('dados.csv', 'w', newline='') as arquivo_csv:
         escritor_csv = csv.writer(arquivo_csv)
         for dado in dados:
-            escritor_csv.writerow([dado])
+            escritor_csv.writerow([dado]+" " + dt) # Revisar
     print("Dados salvos no arquivo CSV com sucesso!")
 
 # Configuração do cliente MQTT
