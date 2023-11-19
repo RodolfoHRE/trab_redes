@@ -8,7 +8,7 @@ def main():
     with open('dadosClimaticosGrupoZ.csv', 'w', newline='\n') as arquivo_csv:
         arquivo_csv.write("Timestamp;Temperatura;Umidade;Pressao;Altitude\n")
 
-
+    print("Aperte Ctrl+C para interromper a leitura do broker e plotar os gráficos!")
     data_reader.data_reader()
 
     df = pd.read_csv('dadosClimaticosGrupoZ.csv', sep=';')
