@@ -1,1 +1,0 @@
-#Envio das flags de irrigação e semeadora
