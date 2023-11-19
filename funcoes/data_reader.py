@@ -1,102 +1,70 @@
-#Leitura dos dados do Broker MQTTS
 import paho.mqtt.client as mqtt
 import time
 
-#Envio das flags de irrigação e semeadora
 def data_sender(irrigacao, semeadura):
-# Configuração do cliente MQTT
-     client = mqtt.Client()
+    client = mqtt.Client()
 
-     def on_connect(client, userdata, flags, rc):
-          print("Conectado com código de resultado: " + str(rc))
-          # Subscrever a um tópico ao se conectar
-          client.subscribe("GrupoZ_irrigação")
-          #publicação
-          client.publish(irrigacao)
-          # Subscrever a um tópico ao se conectar
-          client.subscribe("GrupoZ_semadura")
-          #publicação
-          client.publish(semeadura)
+    def on_connect(client, userdata, flags, rc):
+        print("Conectado com código de resultado: " + str(rc))
+        client.subscribe("GrupoZ_irrigacao")
+        client.publish("GrupoZ_irrigacao", irrigacao)
+        client.subscribe("GrupoZ_semeadura")
+        client.publish("GrupoZ_semeadura", semeadura)
 
-     client.on_connect = on_connect
+    client.on_connect = on_connect
 
-     # Informações de conexão ao broker
-     broker_address = "broker.hivemq.com"
-     port = 1883
-     username = "dadosClimaticosGrupoZ"
-     password = ""
+    broker_address = "broker.hivemq.com"
+    port = 1883
+    username = "dadosClimaticosGrupoZ"
+    password = ""
+    
+    client.username_pw_set(username, password)
+    client.connect(broker_address, port, 60)
 
-     # Conectar ao broker
-     client.username_pw_set(username, password)
-     client.connect(broker_address, port, 60)
+    client.disconnect()
 
-     client.disconnect()
-
-     # Função para salvar os dados em um arquivo CSV
 def salvar_para_csv(dados):
     with open('dadosClimaticosGrupoZ.csv', 'a', newline='\n') as arquivo_csv:
         arquivo_csv.write(dados + '\n')
     print("Dados salvos no arquivo CSV com sucesso!")
 
-dados_list = []
 def data_treatment(dados):
     salvar_para_csv(dados)
     dados_list = dados.split(';')
 
-    temperatura = dados_list[1]
-    umidade = dados_list[2]
+    temperatura = float(dados_list[1])
+    umidade = float(dados_list[2])
 
-    if (20 < temperatura < 30) and (50 < umidade < 70): # temperatura em faixa de 20 a 30 graus e umidade do ar em faixa de 50 a 70% → irrigação = 1
-        irrigacao = "1"
-    else:
-        irrigacao = "0"
-    if (15 < temperatura < 30) and (60 < umidade < 70): # temperatura em faixa de 15 a 30 graus e umidade do ar em faixa de 60 a 70% → semeadora = 1
-        semeadura = "1"
-    else:
-        semeadura = "0"
+    irrigacao = "1" if (20 < temperatura < 30) and (50 < umidade < 70) else "0"
+    semeadura = "1" if (15 < temperatura < 30) and (60 < umidade < 70) else "0"
 
     data_sender(irrigacao, semeadura)
 
-    
 def data_reader():
-    while input() != 'q':
-        # Lista para armazenar os dados recebidos
-        dados_coletados = ""
+    client = mqtt.Client()
+    
+    broker_address = "broker.hivemq.com"
+    port = 1883
+    username = "dadosClimaticosGrupoZ"
+    password = ""
 
-        # Função chamada quando a conexão com o broker é estabelecida
-        def on_connect(client, userdata, flags, rc):
-            print("Conectado com código de resultado: " + str(rc))
-            # Subscrever a um tópico ao se conectar
-            client.subscribe("GrupoZ_time_temp_umi_press_alt")
+    def on_connect(client, userdata, flags, rc):
+        print("Conectado com código de resultado: " + str(rc))
+        client.subscribe("GrupoZ_time_temp_umi_press_alt")
 
-        # Função chamada quando uma nova mensagem é recebida do broker
-        def on_message(client, userdata, msg):
-            print("Mensagem recebida no tópico {}: {}".format(msg.topic, msg.payload.decode()))
+    def on_message(client, userdata, msg):
+        print("Mensagem recebida no tópico {}: {}".format(msg.topic, msg.payload.decode()))
+        data_treatment(msg.payload.decode())
 
-            # Adicionar os dados à lista
-            dados_coletados = msg.payload.decode()
-            data_treatment(dados_coletados)
+    client.on_connect = on_connect
+    client.on_message = on_message
 
-        # Configuração do cliente MQTT
-        client = mqtt.Client()
-        client.on_connect = on_connect
-        client.on_message = on_message
+    client.username_pw_set(username, password)
+    client.connect(broker_address, port, 60)
 
-        # Informações de conexão ao broker
-        broker_address = "broker.hivemq.com"
-        port = 1883
-        username = "dadosClimaticosGrupoZ"
-        password = ""
-
-        # Conectar ao broker
-        client.username_pw_set(username, password)
-        client.connect(broker_address, port, 60)
-
-
-        # Manter o loop de execução para continuar recebendo mensagens
+    try:
         client.loop_forever()
-        time.sleep(1)
+    except:
+        client.disconnect()
 
-        #Encerra a conexão com o broker
-    client.disconnect()
 
