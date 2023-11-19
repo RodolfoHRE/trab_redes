@@ -43,13 +43,12 @@ client.on_connect = on_connect
 client.on_message = on_message
 
 # Informações de conexão ao broker
-broker_address = "endereco_do_broker"
+broker_address = "http://broker.hivemq.com"
 port = 1883
-username = "HEMERA"
-password = "12345678"
+username = "dadosClimaticosGrupoZ"
 
 # Conectar ao broker
-client.username_pw_set(username, password)
+client.username_pw_set(username)
 client.connect(broker_address, port, 60)
 
 # Manter o loop de execução para continuar recebendo mensagens
