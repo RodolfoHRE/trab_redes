@@ -1,7 +1,7 @@
 #Leitura dos dados do Broker MQTTS
 import paho.mqtt.client as mqtt
 import csv
-from funcoes import data_treatment
+
 import time
 
 

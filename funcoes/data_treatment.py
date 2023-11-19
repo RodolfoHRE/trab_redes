@@ -1,5 +1,5 @@
 #Tratamento dos dados e tomada de decisões
-from funcoes import data_sender
+import data_sender
 dados_coletados = []
 
 def data_treatment(dados):
