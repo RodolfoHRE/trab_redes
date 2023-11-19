@@ -1,4 +1,4 @@
-from funcoes import data_display, data_reader
+from funcoes import data_reader
 import pandas as pd
 import paho.mqtt.client as mqtt
 import matplotlib.pyplot as plt
