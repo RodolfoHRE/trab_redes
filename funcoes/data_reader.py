@@ -7,10 +7,10 @@ def data_sender(irrigacao, semeadura):
     def on_connect(client, userdata, flags, rc):
         print("Conectado com código de resultado: " + str(rc))
         client.subscribe("GrupoZ_irrigacao")
-        client.publish("GrupoZ_irrigacao", irrigacao)
+        client.publish("GrupoZ_irrigacao", irrigacao, retain=True)
         client.subscribe("GrupoZ_semeadura")
-        client.publish("GrupoZ_semeadura", semeadura)
-
+        client.publish("GrupoZ_semeadura", semeadura, retain=True)
+        
     client.on_connect = on_connect
 
     broker_address = "broker.hivemq.com"
@@ -21,7 +21,13 @@ def data_sender(irrigacao, semeadura):
     client.username_pw_set(username, password)
     client.connect(broker_address, port, 60)
 
-    client.disconnect()
+    try:    
+        client.loop_start()
+        time.sleep(2)
+    except:
+        client.disconnect()
+        raise Exception("Desconectando...")
+        
 
 def salvar_para_csv(dados):
     with open('dadosClimaticosGrupoZ.csv', 'a', newline='\n') as arquivo_csv:
@@ -35,8 +41,8 @@ def data_treatment(dados):
     temperatura = float(dados_list[1])
     umidade = float(dados_list[2])
 
-    irrigacao = "1" if (20 < temperatura < 30) and (50 < umidade < 70) else "0"
-    semeadura = "1" if (15 < temperatura < 30) and (60 < umidade < 70) else "0"
+    irrigacao = "1" if (20 < temperatura < 30) and (50 < umidade < 70) else "0" #50-70
+    semeadura = "1" if (15 < temperatura < 30) and (60 < umidade < 70) else "0" #60-70
 
     data_sender(irrigacao, semeadura)
 
@@ -66,5 +72,6 @@ def data_reader():
         client.loop_forever()
     except:
         client.disconnect()
+        raise Exception("Desconectando...")
 
 
