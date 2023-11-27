@@ -1,7 +1,5 @@
 # **Redes de Computadores 1 – Projeto Prático Interdisciplinar**
 
-<a href="https://colab.research.google.com/drive/1WDDr9dJTS5N_2z6gewJQUp3_Bf1-pvFZ#scrollTo=vO0_kZsC0ITc" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
-
 ## Engenharia da Computação – Instituto Federal de Educação, Ciência e Tecnologia de São Paulo, Campus Piracicaba
 
 ### Alunos
@@ -27,7 +25,7 @@ Além disso, o programa também salva as variáveis climaticas lidas do ESP32 em
 
 O presente trabalho foi desenvolvido usando a linguagem de programação Python, funcionando em um _notebook_ Jupyter, programado especificamente para funcionar no serviço de hospedagem de _notebooks_ Google Colaboratory - já que utiliza-se de algumas de suas funcionalidades específicas (como menus e a integração com o Google Drive para hospedagem de arquivos).
 </br>
-Para o correto funcionamento do software, foi empregado o uso das bibliotecas `paho-mqtt`, `time`, `pandas`, `matplotlib`, `shutil`, `google` e `os`.
+Para o correto funcionamento do software, foi empregado o uso das bibliotecas `paho-mqtt`, `time`, `datetime`, `pandas`, `matplotlib`, `shutil`, `google` e `os`.
 
 ## Instruções de uso
 
