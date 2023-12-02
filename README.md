@@ -6,7 +6,7 @@
 
 ### Alunos
 
-- [Alexandre Medici Ceregato](mailto:)
+- [Alexandre Medici Ceregato](mailto:c.medici@aluno.ifsp.edu.br)
 - [André Lisboa Augusto](mailto:andre.lisboa@aluno.ifsp.edu.br)
 - [Marcos Henrique Maimoni Campanella](mailto:marcos.campanella@aluno.ifsp.edu.br)
 - [Rodolfo Henrique Raymundo Engelmann](mailto:rodolfo.engelmann@aluno.ifsp.edu.br)
